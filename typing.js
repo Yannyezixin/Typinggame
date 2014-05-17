@@ -31,7 +31,7 @@ $(document).ready( function()
     $(document).keydown( function(event)
     {
         var keyCode = event.keyCode;
-        if(time != 0 ) {
+        if(time > 0 ) {
 
             if($('.bubb'+keyCode).length == 0) {
                 $('#time').html(time - 1);
@@ -76,7 +76,7 @@ $(document).ready( function()
     }
     function getTimeChange()
     {
-        if (time == 0) {
+        if (time <= 0) {
             $('#Backgound').fadeIn('slow');
             $('#timeUp').fadeIn('slow');
             $('#timeUp').css(
