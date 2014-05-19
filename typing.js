@@ -1,63 +1,74 @@
 $(document).ready( function()
 {
-   // var keycode = event.keyCode;
-    var width = screen.width - 100;
-    var height = screen.height - 200;
-    var code = 0;
-    var time = $('#time').html();
+    var width = screen.width - 100,
+        height = screen.height - 200,
+        code = 0,
+        gameSpeed = 550;
 
-    $('#start').css(
-    {
+    var $start = $('#start'),
+        $timeUp = $('#timeUp'),
+        $body = $('body'),
+        $background = $('#Backgound'),
+        $time = $('#time'),
+        $score = $('#score'),
+        $speed = $('#speed'),
+        $gameSpeed = $('#gameSpeed');
+
+    // the button site of start
+    $start.css({
         "top" : (height/2) + 'px',
         "left" : (width/2) + 'px'
     });
 
-    // Begin th game after click the start
-    $('#start').click( function()
-    {
+    // Begin the game after click the start
+    $('#start').click(function() {
         $(this).fadeOut('slow');
-        $('#score').show();
-        $('#time').show();
+        $score.show();
+        $time.show();
+        $speed.show();
         getTimeChange();
         getLetter();
     });
 
     //restart the game
-    $('#timeUp').click( function() {
+    $timeUp.click( function() {
         location.reload();
     });
 
     //Dealing the keyEvents and fadeout the bubble
-    $(document).keydown( function(event)
-    {
+    $(document).keydown(function (event) {
         var keyCode = event.keyCode;
-        if(time > 0 ) {
-
+        if ($time.html() > 0) {
             if($('.bubb'+keyCode).length == 0) {
-                $('#time').html(time - 1);
+                $time.html($time.html() - 1);
              } else {
-
-			    $('.bubb'+keyCode).animate(
-		        {
+			    $('.bubb'+keyCode).animate({
 		            "top": height+"px","opacity" : 0
-		        },'slow');
+		        }, 200 );
 
-		        $('.bubb'+keyCode).fadeOut('slow').hide('slow',function(){
+		        $('.bubb'+keyCode).fadeOut('slow').hide( 'slow', function() {
 		            code += 20;
 		            $('#score').html(code);
 		            $(this).remove();
+                    // speed Up the game speed
+                    if ($score.html() % 400 == 0 ) {
+                        if (gameSpeed >= 300) {
+                            gameSpeed -= 50;
+                            number = parseInt($gameSpeed.html()) + 1;
+                            $gameSpeed.html(number);
+                        }
+                    }
 		        });
 
-		        if ($('#score').html() % 40 == 0 && ('#score').html != 0){
-		            $('#time').html(time+1);
-		        }
+                    // add time
+		            if ($score.html() % 60 == 0 && $score.html != 0) {
+                        timeAdd = parseInt($time.html()) + 1;
+		                $time.html( timeAdd );
+		            }
+
             }
-
-
         }
     });
-
-
 
     // Generating a random alphabet between A-Z
     function getLetter()
@@ -68,27 +79,49 @@ $(document).ready( function()
         // charge the int to char
         var ch = String.fromCharCode(k);
         //  get the random site at the screen
-        var top = Math.floor(Math.random() * height );
-        var left = Math.floor(Math.random() * width );
-        $('body').append('<span class="bubb bubb'+ k +' " style="left:'+ left +'; top: '+ top +'; background-color: '+ color + '">'+ ch +'</span>');
-        if(time == 0) return;
-        setTimeout(getLetter,400);
+        var top = Math.floor(Math.random() * height/6 ),
+            left = Math.floor(Math.random() * width/2 ) + width/4,
+            html = '<span class="bubb bubb'+ k +' " style="left:'+ left +'; top: '+ top +'; background-color: '+ color + '">'+ ch +'</span>' ;
+
+        $body.append(html);
+        slowdown(k);
+
+        if($time.html() <= 0) {
+            return;
+        }
+        setTimeout(getLetter,gameSpeed);
     }
-    function getTimeChange()
-    {
-        if (time <= 0) {
-            $('#Backgound').fadeIn('slow');
-            $('#timeUp').fadeIn('slow');
-            $('#timeUp').css(
-            {
+
+    // make the bubble slowdown when it generated
+    function slowdown(k) {
+        $('.bubb' + k).animate({
+            "top": height + "px","opacity" : 1
+        },{
+            duration:4000,
+            queue:false,
+            complete: function() {
+		                 $('.bubb'+k).fadeOut('slow').hide('slow',function(){
+		                      $(this).remove();
+                         });
+                      }
+        });
+    }
+
+    // Count time
+    function getTimeChange() {
+        if ($time.html() <= 0) {
+            $background.fadeIn('slow');
+            $timeUp.fadeIn('slow');
+            $timeUp.css({
                 "top": (height/2)+'px',
                 "left" : (width/2) - 50 +'px',
                 "z-index": 100
             });
             return;
         }
-        time = $('#time').html() -1;
-        $('#time').html(time);
+
+        $time.html() - 1;
+        $time.html($time.html() - 1);
         setTimeout(getTimeChange, 1000);
     }
 
@@ -103,4 +136,5 @@ $(document).ready( function()
         }
         return color;
     }
+
 });

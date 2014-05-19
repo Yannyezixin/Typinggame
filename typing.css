@@ -1,5 +1,5 @@
 body
-{ width:100%;
+{   width:100%;
     margin: 0px auto;
     padding: 0;
     font-family:"sans-serif","arial";
@@ -7,12 +7,13 @@ body
 .bubb
 {
     position:absolute;
-    width:30px;
-    height:30px;
-    font: bold 25px arial;
+    width:40px;
+    height:40px;
+    color:#fff;
+    font: bold 30px arial;
     background-color:yellow;
     text-align: center;
-    border-radius:20px;
+    border-radius:40px;
     vertical-align:middle;
     padding:5px;
 }
@@ -20,6 +21,7 @@ body
 #score
 {
     font-size:80px;
+    color: #8b5c5c;
     top: 25px;
     right: 50px;
     display:none;
@@ -28,6 +30,16 @@ body
 #time
 {
     font-size:50px;
+    color:#ff0000;
+    top:120px;
+    right:50px;
+    display:none;
+    text-align:right;
+}
+#speed
+{
+    font-size:50px;
+    color:#ff0000;
     top:120px;
     right:50px;
     display:none;
